@@ -1,0 +1,65 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "esm": true,
+    "require": [
+      "tsconfig-paths/register"
+    ],
+    "experimentalSpecifierResolution": "node"
+  },
+  "compilerOptions": {
+    "rootDir": "../",
+    "baseUrl": "./",
+    "outDir": "dist",
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "useDefineForClassFields": true,
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node",
+    ],
+    "paths": {
+      "@types/*": [
+        "./@types/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "@model/*": [
+        "./src/model/*"
+      ],
+      "@shared/*": [
+        "../shared/*"
+      ]
+    },
+    "lib": [
+      "esnext"
+    ]
+  },
+  "typeAcquisition": {
+    "enable": true
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "./@types/*.d.ts",
+    "./@types/*.ts",
+    "./src/**/*.ts",
+    "./src/**/*.js",
+    "./src/**/*.d.ts"
+  ]
+}
