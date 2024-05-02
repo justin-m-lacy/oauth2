@@ -5,7 +5,8 @@ declare module 'express-session' {
 		/**
 		 * State variable used to identify source in OAuth2
 		 */
-		state: string
+		state: string,
+		loggedIn?: boolean
 
 	}
 }

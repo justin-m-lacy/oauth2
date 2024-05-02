@@ -1,0 +1,39 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "Reference authorization server for OAuth2 using Express.js and Typescript.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc && cp package.json dist",
+    "dev": "cross-env NODE_ENV=development tsx watch ./src/index.ts"
+  },
+  "license": "MIT",
+  "keywords": [
+    "oauth2",
+    "authorization",
+    "authentication",
+    "discord",
+    "typescript"
+  ],
+  "author": {
+    "name": "Justin Lacy",
+    "email": "justin.m.lacy@gmail.com"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/node": "^20.8.9",
+    "cross-env": "^7.0.3",
+    "express": "^4.19.2",
+    "tsx": "^4.8.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "eventemitter3": "^5.0.1",
+    "express-session": "^1.18.0",
+    "nanoid": "^5.0.7",
+    "undici": "^6.15.0"
+  }
+}

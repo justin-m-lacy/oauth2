@@ -2,7 +2,7 @@ import { request } from 'undici';
 import auth from './discord-auth.json';
 import type { Express } from 'express';
 import { DiscordAuth } from '@/types/discord';
-import { createState } from '@/util/crypt';
+import { COOKIE_NAME, createState } from '@/util/session';
 
 export function initDiscord(app: Express) {
 
@@ -13,10 +13,11 @@ export function initDiscord(app: Express) {
 
 	app.get('/login/discord', async (req, res) => {
 
+		console.dir(req.headers);
+
 		const state = createState();
 
-		/// express-session doesn't actually store the state in browser,
-		/// only a session-id
+		console.dir(req.cookies);
 		req.session.state = state;
 
 		const target = new URL(auth.AUTH_ENDPOINT);
@@ -37,12 +38,13 @@ export function initDiscord(app: Express) {
 	/// Use access code to request an access token from Discord.
 	app.get('/auth/discord', async (req, res, next) => {
 
+		console.dir(req.headers);
+
 		const code = req.query.code;
 		const state = req.query.state;
 
 		if (typeof code !== 'string') {
 			// improper code.
-			console.warn(`missing code: ${code}`);
 			res.redirect(WEB_HOST);
 			return;
 		} else if (typeof state !== 'string'
@@ -57,8 +59,11 @@ export function initDiscord(app: Express) {
 		try {
 			const tokenInfo = await requestAccessToken(code);
 
-			console.log(`access Token success: ${tokenInfo.access_token}`);
+			console.log(`Access Token: ${tokenInfo.access_token}`);
+
 			req.session.discordAuth = tokenInfo;
+			req.session.loggedIn = true;
+			await req.session.save();
 
 		} catch (err) {
 			//next(err);

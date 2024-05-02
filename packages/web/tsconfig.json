@@ -1,0 +1,56 @@
+{
+	"compilerOptions": {
+		"rootDir": ".",
+		"baseUrl": ".",
+		"noImplicitAny": false,
+		"module": "ESNext",
+		"outDir": "build",
+		"moduleResolution": "Bundler",
+		"resolveJsonModule": true,
+		"strict": true,
+		"target": "ESNext",
+		"allowJs": true,
+		"checkJs": false,
+		"incremental": true,
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		},
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
+		"types": [
+			"vite/client",
+		],
+	},
+	"types": [
+		"vite/client",
+		"dom"
+	],
+	"typeAcquisition": {
+		"enable": true
+	},
+	"include": [
+		"@types/*.d.ts",
+		"./*.ts",
+		"./src/**/*.ts",
+		"./src/**/*.d.ts",
+		"./src/**/*.vue"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"build",
+		"dev"
+	],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		}
+	]
+}

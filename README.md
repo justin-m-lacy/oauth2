@@ -1,63 +1,40 @@
-# OAUTH2 SAMPLE SERVER
+# OAuth2 Reference Client
 
-This is a simple reference server for implementing an OAuth2 authentication server
-using typescript and express.
+Project includes two packages:
 
-It includes a example route for authenticating with Discord.
+- Authorization client (Express.js server acting as OAuth2 client)
 
-More OAuth2 examples to follow.
+- Frontend Website. (Vue website)
 
+It is a reference implementation of RFC 6749 Section 4.1:
+[RFC 6749 4.1](https://www.rfc-editor.org/rfc/rfc6749#section-4.1)
 
+## Auth client
 
-## Environment
+Express.js server making OAuth2 authorization requests to an Authorization Server on behalf a User. It exchanges an authorization `grant code` for an `access token` from an Authorization Server.
 
-`SESSION_SECRET`
+Although this project runs as a server, for the purposes of the documentation it is referred to as the `client` because it makes Authorization requests as a client to OAuth2 authorization services such as Google or Discord.
 
-Secret for encrypting setting session cookies.
+This `client` may serve the static `website` as a dedicated backend, or operate as a standalone authorization client to which the `website` forwards its Authorization grants.
 
-`HOST_URI`
+## Website
 
-URI without port of 'this' auth host. Used to redirect OAuth2 requests back to this server.
+Website representing a user authenticating their identity with an Authorization Server. The `client` directs a user's Authentication request to the Authentication server, which redirects back to the `client` with an authorization `grant code`
 
-`HOST_PORT`
-
-Host of 'this' auth host.
-
-`SERVE_STATIC` [boolean]
-
-Whether to serve static website files with this server. If true, website files are served from the path
- `STATIC_PATH` environment variable, or from `./`
- If false, the server behaves soley as an authentication server, and the static website may be served
- from another host.
-
-`STATIC_PATH`
-
-Path to static website files, if hosting static content.
-
-`WEB_HOST`
-
-URI of site actually serving files. Separating WEB_HOST from auth host allows separating
-the authenticating server and the file host for micro-architectures.
-You must correctly configure Content-Security-Policy on the web host.
+For the purposes of documentation it is referred to as the `website` or the `User`
 
 
+## Example Auth Flow:
 
-## Auth
+- Website User requests login with Auth client using Discord Authentication.
 
-### Discord
+- Auth Client redirects User to Discord authentication service
 
-Set variables in `src/auth/discord-auth.json` to use Discord authentication.
-File should not be committed to public repositories.
+- User authenticates with Discord in browser.
 
-```{
-	"CLIENT_ID": string,
-	"PUBLIC_KEY": string,
-	"CLIENT_SECRET": string,
-	"API_ENDPOINT": "https://discord.com/api/v10",
-	"AUTH_ENDPOINT": "https://discord.com/oauth2/authorize",
-	"TOKEN_ROUTE": "/oauth2/token",
-	"SCOPE": string
-}```
+- Discord redirects User to Auth Client with an authorization `grant code`.
 
-`SCOPE`
-	List of authorization scopes requested from discord.
+- Auth Client uses authorization grant code to obtain a discord `access token`
+
+- After obtaining and storing User's `access token`, Auth Client redirects User back
+to Website
