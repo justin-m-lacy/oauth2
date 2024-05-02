@@ -2,7 +2,7 @@ import { request } from 'undici';
 import auth from './discord-auth.json';
 import type { Express } from 'express';
 import { DiscordAuth } from '@/types/discord';
-import { COOKIE_NAME, createState } from '@/util/session';
+import { createState } from '@/util/session';
 
 export function initDiscord(app: Express) {
 
