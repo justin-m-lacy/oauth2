@@ -13,11 +13,8 @@ export function initDiscord(app: Express) {
 
 	app.get('/login/discord', async (req, res) => {
 
-		console.dir(req.headers);
-
 		const state = createState();
 
-		console.dir(req.cookies);
 		req.session.state = state;
 
 		const target = new URL(auth.AUTH_ENDPOINT);
@@ -37,8 +34,6 @@ export function initDiscord(app: Express) {
 
 	/// Use access code to request an access token from Discord.
 	app.get('/auth/discord', async (req, res, next) => {
-
-		console.dir(req.headers);
 
 		const code = req.query.code;
 		const state = req.query.state;
