@@ -1,15 +1,6 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "files": true,
-    "esm": true,
-    "require": [
-      "tsconfig-paths/register"
-    ],
-    "experimentalSpecifierResolution": "node"
-  },
   "compilerOptions": {
-    "rootDir": "../",
+    "rootDir": "./",
     "baseUrl": "./",
     "outDir": "dist",
     "target": "esnext",
@@ -31,17 +22,11 @@
       "node",
     ],
     "paths": {
-      "@types/*": [
-        "./@types/*"
-      ],
       "@/*": [
         "./src/*"
       ],
       "@model/*": [
         "./src/model/*"
-      ],
-      "@shared/*": [
-        "../shared/*"
       ]
     },
     "lib": [
