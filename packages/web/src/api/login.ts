@@ -1,6 +1,6 @@
 export async function apiGetLogin() {
 
-	const AuthHost = import.meta.env.VITE_AUTH_HOST;
+	const AuthHost = import.meta.env.VITE_AUTH_CLIENT;
 
 	const res = await fetch(`${AuthHost}/@me`, {
 		method: 'POST',

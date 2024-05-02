@@ -12,7 +12,7 @@ onMounted(() => {
 });
 
 
-const urlLink = `${import.meta.env.VITE_AUTH_HOST}/login/discord`;
+const urlLink = `${import.meta.env.VITE_AUTH_CLIENT}/login/discord`;
 
 const onClick = () => {
   window.location.href = urlLink;

@@ -10,7 +10,7 @@ export default defineConfig(async ({ mode, command }) => {
 
     const env = loadEnv(mode, process.cwd());
 
-    const origins = ["'self'", env.VITE_AUTH_HOST].
+    const origins = ["'self'", env.VITE_AUTH_CLIENT].
         filter(v => v != null).join(" ");
 
     const securityPolicies = [

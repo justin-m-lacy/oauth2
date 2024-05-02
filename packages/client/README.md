@@ -8,7 +8,6 @@ It includes a example route for authenticating with Discord.
 More OAuth2 examples to follow.
 
 
-
 ## Environment
 
 `SESSION_SECRET`
@@ -25,8 +24,7 @@ Host of 'this' auth host.
 
 `SERVE_STATIC` [boolean]
 
-Whether to serve static website files with this server. If true, website files are served from the path
- `STATIC_PATH` environment variable, or from `./`
+Whether to serve static website files with this server. If true, website files are served from the path `STATIC_PATH` environment variable, or from `./`
  If false, the server behaves soley as an authentication server, and the static website may be served
  from another host.
 
@@ -36,7 +34,9 @@ Path to static website files, if hosting static content.
 
 `WEB_HOST`
 
-URI of site actually serving files. Separating WEB_HOST from auth host allows separating
+URI of site actually serving files. Include both protocol and port number.
+
+Separating WEB_HOST from auth host allows separating
 the authenticating server and the file host for micro-architectures.
 You must correctly configure Content-Security-Policy on the web host.
 
@@ -46,10 +46,23 @@ You must correctly configure Content-Security-Policy on the web host.
 
 ### Discord
 
-Set variables in `src/auth/discord-auth.json` to use Discord authentication.
-File should not be committed to public repositories.
+#### Discord Application
 
-```{
+To use Discord OAuth2 Authentication you must first create a Discord application and enabled OAuth2.
+
+[https://discord.com/developers/](https://discord.com/developers/)
+
+[Discord OAuth2 Docs](https://discord.com/developers/docs/topics/oauth2)
+
+#### Discord Variables
+
+Store Discord authentication information in `src/auth/discord-auth.json`
+This file should not be committed to any public repository.
+
+Check Discord documentation to ensure the Discord API and AUTH endpoints are up to date.
+
+```json
+{
 	"CLIENT_ID": string,
 	"PUBLIC_KEY": string,
 	"CLIENT_SECRET": string,
@@ -57,7 +70,8 @@ File should not be committed to public repositories.
 	"AUTH_ENDPOINT": "https://discord.com/oauth2/authorize",
 	"TOKEN_ROUTE": "/oauth2/token",
 	"SCOPE": string
-}```
+}
+```
 
 `SCOPE`
-	List of authorization scopes requested from discord.
+	List of authorization scopes requested from Discord.
