@@ -4,17 +4,18 @@ import type { Express } from 'express';
 import { DiscordAuth } from '@/types/discord';
 import { createState } from '@/util/session';
 
-export function initDiscord(app: Express) {
+// Site actually hosting the web files.
+// This allows the auth server to be separate from the file host.
+const WEB_HOST = process.env.WEB_HOST ??
+	`${process.env.HOST_URI}:${process.env.HOST_PORT}`;
 
-	// Site actually hosting the web files.
-	// This allows the auth server to be separate from the file host.
-	const WEB_HOST = process.env.WEB_HOST ??
-		`${process.env.HOST_URI}:${process.env.HOST_PORT}`;
+console.log(`web host: ${WEB_HOST}`);
+
+export function initDiscord(app: Express) {
 
 	app.get('/login/discord', async (req, res) => {
 
 		const state = createState();
-
 		req.session.state = state;
 
 		const target = new URL(auth.AUTH_ENDPOINT);
@@ -23,7 +24,7 @@ export function initDiscord(app: Express) {
 		target.searchParams.set('state', state);
 		target.searchParams.set(
 			'redirect_uri',
-			`${process.env.HOST_URI}:${process.env.HOST_PORT}/auth/discord`
+			WEB_HOST
 		);
 		target.searchParams.set('scope', auth.SCOPE);
 
@@ -32,39 +33,42 @@ export function initDiscord(app: Express) {
 
 	});
 
+	app.options('/auth/discord', (req, res, next) => next());
+
 	/// Use access code to request an access token from Discord.
-	app.get('/auth/discord', async (req, res, next) => {
-
-		const code = req.query.code;
-		const state = req.query.state;
-
-		if (typeof code !== 'string') {
-			// improper code.
-			res.redirect(WEB_HOST);
-			return;
-		} else if (typeof state !== 'string'
-			|| !req.session.state
-			|| state !== req.session.state) {
-			// invalid or missing 'stat'
-			console.warn(`Invalid state: '${state}' Expected: '${req.session.state}'`);
-			res.redirect(WEB_HOST);
-			return;
-		}
+	app.post('/auth/discord', async (req, res, next) => {
 
 		try {
-			const tokenInfo = await requestAccessToken(code);
 
-			console.log(`Access Token: ${tokenInfo.access_token}`);
+			const data = req.body;
+
+			const code = data.code;
+			const state = data.state;
+
+			if (typeof code !== 'string') {
+				// improper code.
+				res.redirect(WEB_HOST);
+				return;
+			} else if (typeof state !== 'string'
+				|| !req.session.state
+				|| state !== req.session.state) {
+				// invalid or missing 'stat'
+				console.warn(`Invalid state: '${state}' Expected: '${req.session.state}'`);
+				res.redirect(WEB_HOST);
+				return;
+			}
+
+			const tokenInfo = await requestAccessToken(code);
 
 			req.session.discordAuth = tokenInfo;
 			req.session.loggedIn = true;
-			await req.session.save();
 
 		} catch (err) {
 			//next(err);
+			console.warn(err);
 		}
 
-		res.redirect(WEB_HOST);
+		res.json({ loggedIn: req.session.loggedIn ?? false });
 
 	});
 
@@ -84,7 +88,7 @@ export async function requestAccessToken(code: string) {
 			grant_type: 'authorization_code',
 			code: code,
 			scope: auth.SCOPE,
-			redirect_uri: `${process.env.HOST_URI}:${process.env.HOST_PORT}/auth/discord`
+			redirect_uri: WEB_HOST
 		}).toString(),
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'

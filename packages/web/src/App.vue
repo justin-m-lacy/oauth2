@@ -5,9 +5,10 @@ import { useLoginStore } from './store/login';
 const loginStore = useLoginStore();
 
 const busy = computed(() => loginStore.busy);
-onMounted(() => {
+
+onMounted(async () => {
   if (!loginStore.loggedIn) {
-    loginStore.getLogin();
+    await loginStore.getLogin();
   }
 });
 

@@ -4,14 +4,15 @@ import session from 'express-session';
 import './load-environment';
 import { initDiscord } from '@/auth/discord';
 import { handleStatic } from '@/handlers/static';
+import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = process.env.HOST_PORT;
 
 app.use(cors({
-
-	origin: process.env.WEB_HOST,
-	credentials: true
+	origin: 'http://localhost:5173',
+	credentials: true,
+	methods: ['GET', 'HEAD', 'POST', 'OPTIONS']
 }));
 
 /// https://github.com/expressjs/session
@@ -22,11 +23,11 @@ app.use(session({
 	saveUninitialized: true,
 	name: process.env.SESSION_COOKIE_NAME,
 	cookie: {
-		sameSite: 'lax',
+		sameSite: 'strict',
 	}
 }));
 
-initDiscord(app);
+app.use(bodyParser.json());
 
 app.post('/@me', (req, res) => {
 
@@ -35,6 +36,8 @@ app.post('/@me', (req, res) => {
 	});
 
 });
+
+initDiscord(app);
 
 /// Handle static file routes.
 if (process.env.SERVE_STATIC) {
